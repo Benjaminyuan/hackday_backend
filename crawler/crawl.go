@@ -3,8 +3,10 @@ package main
 import (
 	"benji/hackday/crawl"
 	"fmt"
+
 	// "sync"
 	"encoding/json"
+
 	"github.com/garyburd/redigo/redis"
 )
 
@@ -22,16 +24,13 @@ const TYPEPROPDATA = "timeType=1&province=%E5%90%89%E6%9E%97"
 
 const SELECTRANKDATA = "http://www.wrd.cn/view/home/hotEvent/selectRankData.action"
 const SELECTRANKDATADATA = "timeType=1&labels=&province=%E9%BB%91%E9%BE%99%E6%B1%9F"
-var provinces = []string{"北京","天津","上海","重庆","河北","山西省","辽宁","吉林","黑龙江",
-"江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东",
-"海南","四川","贵州","云南","陕西","甘肃","青海","台湾","西藏","新疆","内蒙古","宁夏","香港","澳门"}
 
-
-
-
+var provinces = []string{"北京", "天津", "上海", "重庆", "河北", "山西省", "辽宁", "吉林", "黑龙江",
+	"江苏", "浙江", "安徽", "福建", "江西", "山东", "河南", "湖北", "湖南", "广东",
+	"海南", "四川", "贵州", "云南", "陕西", "甘肃", "青海", "台湾", "西藏", "新疆", "内蒙古", "宁夏", "香港", "澳门"}
 
 func main() {
-	c, err := redis.Dial("tcp","127.0.0.1:6379")
+	c, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Print("fail to connect redis ")
 	}
@@ -42,11 +41,11 @@ func main() {
 	allChina := crawl.GetMapData(ALLCHINA, ALlCHINADATA)
 	allChinaData := crawl.ParseAllChinaData(allChina)
 	fmt.Println(allChinaData)
-	temp , err := json.Marshal(allChinaData)
+	temp, err := json.Marshal(allChinaData)
 	if err != nil {
 		fmt.Println(err)
 	}
-	c.Do("SET","china_data",string(temp))
+	c.Do("SET", "china_data", string(temp))
 	fmt.Print(allChinaData)
 	fmt.Print("------------allchina--------------\n\n\n")
 	/*--------------*/
@@ -64,14 +63,14 @@ func main() {
 	// 	fmt.Print(allChinaData)
 	// 	fmt.Print("------------allchina--------------\n\n\n")
 	// }()
-	
+
 	/*--------------*/
 
 	allProvince := crawl.GetMapData(ALLPROVINCE, ALLPROVINCEDATA)
 	allProvinceData := crawl.ParseAllProvinceData(allProvince)
 	fmt.Println(allProvinceData)
-	provinceTemp ,_:= json.Marshal(allProvinceData)
-	c.Do("SET","all_province_data",string(provinceTemp))
+	provinceTemp, _ := json.Marshal(allProvinceData)
+	c.Do("SET", "all_province_data", string(provinceTemp))
 	fmt.Print("---------------province-------------------\n\n\n")
 	// go func(){
 	// 	wait_group.Add(1)
@@ -87,36 +86,35 @@ func main() {
 
 	/*--------------*/
 
-	for _, province := range provinces{
-		hot:= crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province,"2"))
-		top := crawl.GetMapData(SELECTCHOOSELIST,crawl.GetSelectChoose(province,"5"))
-		typeProp := crawl.GetMapData(TYPEPROP,crawl.GetTypeProp(province))
+	for _, province := range provinces {
+		hot := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "2"))
+		top := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "5"))
+		typeProp := crawl.GetMapData(TYPEPROP, crawl.GetTypeProp(province))
 		Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
-		
+
 		hotData := crawl.ParseSelectChoseList(hot)
-	
+
 		topData := crawl.ParseSelectChoseList(top)
 		typePropData := crawl.ParseTypeProp(typeProp)
 		RankData := crawl.ParseRankData(Rank)
 
-		fmt.Println("hot:  ",hotData)
+		fmt.Println("hot:  ", hotData)
 		fmt.Print("---------------\n\n\n")
-		fmt.Println("hot:   ",typePropData)
+		fmt.Println("hot:   ", typePropData)
 		fmt.Print("---------------\n\n\n")
 		fmt.Println(string(Rank))
-		fmt.Println("rank:  ",RankData)
+		fmt.Println("rank:  ", RankData)
 		fmt.Print("---------------\n\n\n")
 		hotTemp, _ := json.Marshal(hotData)
-		topTemp,_:= json.Marshal(topData)
-		typeTemp,_:= json.Marshal(typePropData)
-		rankTemp,_ :=json.Marshal(RankData)
+		topTemp, _ := json.Marshal(topData)
+		typeTemp, _ := json.Marshal(typePropData)
+		rankTemp, _ := json.Marshal(RankData)
 
-		
-		c.Do("LPUSH","province_hot_list",string(hotTemp))
-		c.Do("LPUSH","province_top_list", string(topTemp))
-		c.Do("LPUSH","type_prop",string(typeTemp))
-		c.Do("LPUSH","rank",string(rankTemp))
-		
+		c.Do("LPUSH", "province_hot_list", string(hotTemp))
+		c.Do("LPUSH", "province_top_list", string(topTemp))
+		c.Do("LPUSH", "type_prop", string(typeTemp))
+		c.Do("LPUSH", "rank", string(rankTemp))
+
 	}
 	// go func(){
 	// 	wait_group.Add(1)
@@ -126,30 +124,27 @@ func main() {
 	// 		top := crawl.GetMapData(SELECTCHOOSELIST,crawl.GetSelectChoose(province,"5"))
 	// 		typeProp := crawl.GetMapData(TYPEPROP,crawl.GetTypeProp(province))
 	// 		Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
-			
+
 	// 		hotData := crawl.ParseSelectChoseList(hot)
 	// 		topData := crawl.ParseSelectChoseList(top)
 	// 		typePropData := crawl.ParseTypeProp(typeProp)
 	// 		RankData := crawl.ParseRankData(Rank)
 
-			
 	// 		hotTemp, _ := json.Marshal(hotData)
 	// 		topTemp,_:= json.Marshal(topData)
 	// 		typeTemp,_:= json.Marshal(typePropData)
 	// 		rankTemp,_ :=json.Marshal(RankData)
 
-	// 		lock <- 1 
+	// 		lock <- 1
 	// 		c.Do("LPUSH","province_hot_list",string(hotTemp))
 	// 		c.Do("LPUSH","province_top_list", string(topTemp))
 	// 		c.Do("LPUSH","type_prop",string(typeTemp))
 	// 		c.Do("LPUSH","rank",string(rankTemp))
-	// 		<-lock 
+	// 		<-lock
 	// 	}
-	
-	// }()
-	
-	
-		// wait_group.Wait()
 
-	
+	// }()
+
+	// wait_group.Wait()
+
 }
