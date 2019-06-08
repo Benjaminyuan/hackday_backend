@@ -100,10 +100,11 @@ func main() {
 			c.String(400, "查询失败，请重试")
 			return
 		}
-		var resData []*model.Rank
+		var resData []*model.RankData
 		for _, v := range data {
 
-			temp := &model.Rank{}
+			temp := &model.RankData{}
+			fmt.Println(string(v.([]byte)))
 			json.Unmarshal(v.([]byte), temp)
 			fmt.Println(temp)
 			resData = append(resData, temp)
