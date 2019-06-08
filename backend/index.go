@@ -63,7 +63,6 @@ func main(){
 		data , err := redis.Values(client.Do("LRANGE","type_prop",0,32))
 		if err != nil {
 			fmt.Println(err)
-
 			c.String(400,"查询失败，请重试")
 			return
 		}

@@ -1,7 +1,7 @@
 package crawl
 
 import (
-	"fmt"
+	_"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -46,9 +46,6 @@ curl 'http://www.wrd.cn/view/home/hotEvent/selectChooseListData.action'
  -H 'Content-Type: application/x-www-form-urlencoded' 
  --data 
  'timeType=1&sort=5&labels=&province=%E5%90%89%E6%9E%97&areaType=1' --compressed
-   sort = 2 -> hot top 
-   sort = 5 -> change top 
-  
 `
 
 const typeProp = `
@@ -100,7 +97,7 @@ func GetMapData(url string, postdata string) []byte {
 	dec := mahonia.NewDecoder("gbk")
 	rd := dec.NewReader(response.Body)
 	c, _ := ioutil.ReadAll(rd)
-	fmt.Println(string(c))
+	// fmt.Println(string(c))
 	return c
 
 }

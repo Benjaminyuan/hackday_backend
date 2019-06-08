@@ -8,15 +8,15 @@ type ProvinceAction struct {
 type ChinaAction struct {
 	Code       string    `json:"code"`
 	Message    string    `json:"message"`
-	List       []HotData `json:"lsit"`
-	TotalCount string    `json:"totalCount"`
+	List       []HotData `json:"list"`
+	TotalCount int     `json:"totalCount"`
 	MaxPage    int       `json:"maxPage"`
 }
-type SelectChoseListAction struct {
+type SelectChooseListAction struct {
 	Code       string    `json:"code"`
 	Message    string    `json:"message"`
-	List       []HotData `json:"lsit"`
-	TotalCount string    `json:"totalCount"`
+	TotalCount int    `json:"totalCount"`
+	List       []HotData `json:"list"`
 	MaxPage    int       `json:"maxPage"`
 }
 type HotData struct {
@@ -44,4 +44,22 @@ type HotData struct {
 type LineData struct {
 	Total string `json:"total"`
 	Name  string `json:"name"`
+}
+
+type TypeProp struct {
+	Code    string         `json:"code"`
+	Data    map[string]int `json:"data"`
+	Message string         `json:"message"`
+}
+type RankData struct {
+	Code    string `json:"code"`
+	Data    Rank   `json:"data"`
+	Message string `json:"message"`
+}
+type Rank struct {
+	HotAsc           int `json:"hotAsc"`
+	HotAvg           int `json:"hotAvg"`
+	HotCount         int `json:"hotCount"`
+	HotDesc          int `json:"hotDesc"`
+	HotDifferenceAvg int `json:"hotDifferenceAvg"`
 }
