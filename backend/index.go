@@ -17,7 +17,13 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	s.Use(CorsMiddleware())
+	s.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
+		c.Set("content-type", "application/json")
+		c.Next()
+	})
 	s.GET("/china", func(c *gin.Context) {
 		data, err := redis.Bytes(client.Do("GET", "china_data"))
 		if err != nil {
@@ -114,34 +120,6 @@ func main() {
 			"data": resData,
 		})
 	})
-	func CorsMiddleware() gin.HandlerFunc {
-		return func(c *gin.Context) {
-			method := c.Request.Method
-			origin := c.Request.Header.Get("Origin")
-			var filterHost = [...]string{"http://localhost.*","http://*.hfjy.com"}
-			// filterHost 做过滤器，防止不合法的域名访问
-			var isAccess = false
-			for _, v := range(filterHost) {
-				match, _ := regexp.MatchString(v, origin)
-				if match {
-					isAccess = true
-				}
-			}
-			if isAccess {
-			// 核心处理方式
-				c.Header("Access-Control-Allow-Origin", "*")
-				c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-				c.Header("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE")
-				c.Set("content-type", "application/json")
-			}
-			//放行所有OPTIONS方法
-			if method == "OPTIONS" {
-				c.JSON(http.StatusOK, "Options Request!")
-			}
-	
-		  c.Next()
-		}
-	  }
-	
+
 	s.Run(":8008")
 }
