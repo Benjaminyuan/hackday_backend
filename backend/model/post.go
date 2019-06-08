@@ -58,8 +58,8 @@ type RankData struct {
 }
 type Rank struct {
 	HotAsc           int `json:"hotAsc"`
-	HotAvg           int `json:"hotAvg"`
+	HotAvg           float64`json:"hotAvg"`
 	HotCount         int `json:"hotCount"`
 	HotDesc          int `json:"hotDesc"`
-	HotDifferenceAvg int `json:"hotDifferenceAvg"`
+	HotDifferenceAvg float64 `json:"hotDifferenceAvg"`
 }
