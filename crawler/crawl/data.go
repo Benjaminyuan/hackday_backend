@@ -9,13 +9,13 @@ type ChinaAction struct {
 	Code       string    `json:"code"`
 	Message    string    `json:"message"`
 	List       []HotData `json:"list"`
-	TotalCount int     `json:"totalCount"`
+	TotalCount int       `json:"totalCount"`
 	MaxPage    int       `json:"maxPage"`
 }
 type SelectChooseListAction struct {
 	Code       string    `json:"code"`
 	Message    string    `json:"message"`
-	TotalCount int    `json:"totalCount"`
+	TotalCount int       `json:"totalCount"`
 	List       []HotData `json:"list"`
 	MaxPage    int       `json:"maxPage"`
 }
@@ -57,9 +57,9 @@ type RankData struct {
 	Message string `json:"message"`
 }
 type Rank struct {
-	HotAsc           int `json:"hotAsc"`
-	HotAvg           int `json:"hotAvg"`
-	HotCount         int `json:"hotCount"`
-	HotDesc          int `json:"hotDesc"`
-	HotDifferenceAvg int `json:"hotDifferenceAvg"`
+	HotAsc           int     `json:"hotAsc"`
+	HotAvg           float64 `json:"hotAvg"`
+	HotCount         int     `json:"hotCount"`
+	HotDesc          int     `json:"hotDesc"`
+	HotDifferenceAvg float64 `json:"hotDifferenceAvg"`
 }
