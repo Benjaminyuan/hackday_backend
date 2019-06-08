@@ -12,11 +12,7 @@ import (
 
 func main() {
 	s := gin.Default()
-	client, err := redis.Dial("tcp", "127.0.0.1:6379")
-	defer client.Close()
-	if err != nil {
-		fmt.Println(err)
-	}
+
 	s.Use(func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -25,6 +21,11 @@ func main() {
 		c.Next()
 	})
 	s.GET("/china", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Bytes(client.Do("GET", "china_data"))
 		if err != nil {
 			c.String(400, "查询失败，请重试")
@@ -37,6 +38,11 @@ func main() {
 		})
 	})
 	s.GET("/province", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Bytes(client.Do("GET", "all_province_data"))
 		if err != nil {
 			fmt.Println(err)
@@ -50,6 +56,11 @@ func main() {
 		})
 	})
 	s.GET("/provinces/change", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Values(client.Do("LRANGE", "province_hot_list", 0, 32))
 		if err != nil {
 			fmt.Println(err)
@@ -67,6 +78,11 @@ func main() {
 		})
 	})
 	s.GET("/provinces/top", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Values(client.Do("LRANGE", "province_top_list", 0, 32))
 		if err != nil {
 			fmt.Println(err)
@@ -84,6 +100,11 @@ func main() {
 		})
 	})
 	s.GET("/typeprop", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Values(client.Do("LRANGE", "type_prop", 0, 32))
 		if err != nil {
 			fmt.Println(err)
@@ -101,6 +122,11 @@ func main() {
 		})
 	})
 	s.GET("/rank", func(c *gin.Context) {
+		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		defer client.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
 		data, err := redis.Values(client.Do("LRANGE", "rank", 0, 32))
 		if err != nil {
 			fmt.Println(err)
