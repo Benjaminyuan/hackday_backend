@@ -156,6 +156,8 @@ func main() {
 		strPage := c.Query("page")
 		page, _ := strconv.Atoi(strPage)
 		path := "./news/" + c.Param("type") + "/"
+		dir ,_ := ioutil.ReadDir(path)
+		length := len(dir)
 		var strData []string
 		for i := page * pagesize+1; i < (page+1)*pagesize+1; i++ {
 			file, err := os.Open(path + strconv.Itoa(i) + ".txt")
@@ -175,6 +177,7 @@ func main() {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"news": strData,
+			"totalCount":length,
 		})
 
 	})
@@ -202,6 +205,7 @@ func main() {
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"blog": newData,
+			"totalCount":1537,
 		})
 	})
 	// const filePath = "/root/hackday_backend/backend/rumor-repost/"
