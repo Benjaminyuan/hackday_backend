@@ -157,7 +157,7 @@ func main() {
 		page, _ := strconv.Atoi(strPage)
 		path := "./news/" + c.Param("type") + "/"
 		var strData []string
-		for i := page * pagesize; i < (page+1)*pagesize; i++ {
+		for i := page * pagesize+1; i < (page+1)*pagesize+1; i++ {
 			file, err := os.Open(path + strconv.Itoa(i) + ".txt")
 			if err != nil {
 				fmt.Println(err)
