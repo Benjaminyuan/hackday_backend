@@ -212,11 +212,11 @@ func main() {
 	// 		fmt.Println(err)
 	// 	}
 	// }
-	s.GET("/chat", func(c *gin.Context) {
-		// strNum := c.Query("num")
-		// num := strconv.Atoi(strNum)
-		// const filePath = "/Users/mac/Documents/project/hackday/backend/rumor-repost/"
-		// file ,_ := os.Open(filePath)
-	})
+	// s.GET("/chat", func(c *gin.Context) {
+	// 	strNum := c.Query("num")
+	// 	num := strconv.Atoi(strNum)
+	// 	const filePath = "/Users/mac/Documents/project/hackday/backend/rumor-repost/"
+	// 	file ,_ := os.Open(filePath)
+	// })
 	s.Run(":8008")
 }
