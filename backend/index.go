@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+
+	"strconv"
+
+	"io/ioutil"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
@@ -12,7 +17,7 @@ import (
 
 func main() {
 	s := gin.Default()
-
+	const pagesize = 20
 	s.Use(func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -146,6 +151,31 @@ func main() {
 			"data": resData,
 		})
 	})
+	s.GET("/news/:type", func(c *gin.Context) {
 
+		strPage := c.Query("page")
+		page, _ := strconv.Atoi(strPage)
+		path := "./news/" + c.Param("type") + "/"
+		var strData []string
+		for i := page * pagesize; i < (page+1)*pagesize; i++ {
+			file, err := os.Open(path + strconv.Itoa(i) + ".txt")
+			if err != nil {
+				fmt.Println(err)
+				break
+			}
+			b, _ := ioutil.ReadAll(file)
+
+			strData = append(strData, string(b))
+		}
+		if len(strData) == 0 {
+			c.JSON(http.StatusNotFound, gin.H{
+				"info": "fail to get data",
+			})
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"news": strData,
+		})
+
+	})
 	s.Run(":8008")
 }

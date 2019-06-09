@@ -1,4 +1,6 @@
 const fetch = require("node-fetch")
+const redis = require("redis")
+const client = redis.createClient()
 const curl =`
 curl 'http://www.wrd.cn/view/home/bignessEvent/getBignessEventList.action' 
 -H 'Origin: http://www.wrd.cn' 
@@ -10,7 +12,7 @@ curl 'http://www.wrd.cn/view/home/bignessEvent/getBignessEventList.action'
 --data 'startTime=2019-06-02+05%3A30%3A15&endTime=2019-06-09+05%3A30%3A15' 
 --compressed`
 fetch("http://www.wrd.cn/view/home/bignessEvent/getBignessEventList.action",{
-    methods: "POST",
+    method: "post",
     body:'startTime=2019-06-02+05%3A30%3A15&endTime=2019-06-09+05%3A30%3A15',
     headers:{
         "Origin": "http://www.wrd.cn",
@@ -20,6 +22,10 @@ fetch("http://www.wrd.cn/view/home/bignessEvent/getBignessEventList.action",{
         "Referer": "http://www.wrd.cn/home.shtml?page=2",
         "X-Requested-With": "XMLHttpRequest"
     }
-}).then(res =>{
-    console.log(res.json)
+}).then(res =>res.json()).then(json =>{
+    str = JSON.stringify(json)
+    buf = Buffer.from(str,"utf-8")
+    console.log(buf.toString())
+    client.
+    
 })
