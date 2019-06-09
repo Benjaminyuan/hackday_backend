@@ -181,7 +181,7 @@ func main() {
 	s.GET("/blog", func(c *gin.Context) {
 		strPage := c.Query("page")
 		page, _ := strconv.Atoi(strPage)
-		const filePath = "/Users/mac/Documents/project/hackday/backend/original-microblog/"
+		const filePath = "/root/hackday_backend/backend/original-microblog/"
 		var newData []*model.News
 		for i := page * pagesize; i < (page+1)*pagesize; i++ {
 			file, err := os.Open(filePath + strconv.Itoa(i) + ".json")
@@ -204,7 +204,7 @@ func main() {
 			"blog": newData,
 		})
 	})
-	// const filePath = "/Users/mac/Documents/project/hackday/backend/rumor-repost/"
+	// const filePath = "/root/hackday_backend/backend/rumor-repost/"
 	// dir, _ := ioutil.ReadDir(filePath)
 	// for index, file := range dir {
 	// 	err := os.Rename(filePath+file.Name(), filePath+strconv.Itoa(index)+".json")
@@ -215,7 +215,7 @@ func main() {
 	// s.GET("/chat", func(c *gin.Context) {
 	// 	strNum := c.Query("num")
 	// 	num := strconv.Atoi(strNum)
-	// 	const filePath = "/Users/mac/Documents/project/hackday/backend/rumor-repost/"
+	// 	const filePath = "/root/hackday_backend/backend/rumor-repost/"
 	// 	file ,_ := os.Open(filePath)
 	// })
 	s.Run(":8008")
