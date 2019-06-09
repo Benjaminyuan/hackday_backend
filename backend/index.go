@@ -171,11 +171,45 @@ func main() {
 			c.JSON(http.StatusNotFound, gin.H{
 				"info": "fail to get data",
 			})
+			return 
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"news": strData,
 		})
 
 	})
+	s.GET("/blog",func(c *gin.Context){
+		strPage := c.Query("page")
+		page,_ := strconv.Atoi(strPage)
+		const filePath = "/Users/mac/Documents/project/hackday/backend/original-microblog/"
+		var newData []*model.News
+		for i:= page*pagesize ;i<(page+1)*pagesize;i++{
+			file ,err  := os.Open(filePath+strconv.Itoa(i)+".json")
+			if err != nil {
+				fmt.Println(err)
+				break 
+			}
+			b,_:= ioutil.ReadAll(file)
+			news := &model.News{}
+			json.Unmarshal(b,news)
+			newData = append(newData,news)	
+		}
+		if len(newData) == 0{
+			c.JSON(http.StatusNotFound,gin.H{
+				"info":"blog not found",
+			})
+			return 
+		}
+		c.JSON(http.StatusOK,gin.H{
+			"blog":newData,
+		})
+	})
+	// dir, _ := ioutil.ReadDir(filePath)
+	// for index, file := range dir {
+	// 	err := os.Rename(filePath+file.Name(), strconv.Itoa(index)+".json")
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// }
 	s.Run(":8008")
 }
