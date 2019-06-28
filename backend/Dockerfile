@@ -1,7 +1,7 @@
 FROM lang:latest
 
+COPY . /app
+
 WORKDIR     /app
 
-COPY .      /app
-
-CMD run build .
+CMD [ "go","run","index.go" ]

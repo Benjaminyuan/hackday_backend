@@ -32,6 +32,7 @@ type HotData struct {
 	KeyWord_3      string     `json:"keyword3"`
 	KeyWord_4      string     `json:"keyword4"`
 	Labels         string     `json:"labels"`
+	LabelsNames    string     `json:"lableNames"`
 	LineData       []LineData `json:"lineData"`
 	LongTile       string     `json:"longTitle"`
 	Origin         string     `json:"origin"`

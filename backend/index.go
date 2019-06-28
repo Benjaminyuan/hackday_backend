@@ -26,7 +26,7 @@ func main() {
 		c.Next()
 	})
 	s.GET("/china", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -43,7 +43,7 @@ func main() {
 		})
 	})
 	s.GET("/province", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -61,7 +61,7 @@ func main() {
 		})
 	})
 	s.GET("/provinces/change", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -83,7 +83,7 @@ func main() {
 		})
 	})
 	s.GET("/provinces/top", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -105,7 +105,7 @@ func main() {
 		})
 	})
 	s.GET("/typeprop", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -127,7 +127,7 @@ func main() {
 		})
 	})
 	s.GET("/rank", func(c *gin.Context) {
-		client, err := redis.Dial("tcp", "127.0.0.1:6379")
+		client, err := getRedisClient()
 		defer client.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -156,10 +156,10 @@ func main() {
 		strPage := c.Query("page")
 		page, _ := strconv.Atoi(strPage)
 		path := "./news/" + c.Param("type") + "/"
-		dir ,_ := ioutil.ReadDir(path)
+		dir, _ := ioutil.ReadDir(path)
 		length := len(dir)
 		var strData []string
-		for i := page * pagesize+1; i < (page+1)*pagesize+1; i++ {
+		for i := page*pagesize + 1; i < (page+1)*pagesize+1; i++ {
 			file, err := os.Open(path + strconv.Itoa(i) + ".txt")
 			if err != nil {
 				fmt.Println(err)
@@ -176,8 +176,8 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"news": strData,
-			"totalCount":length,
+			"news":       strData,
+			"totalCount": length,
 		})
 
 	})
@@ -204,23 +204,14 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"blog": newData,
-			"totalCount":1537,
+			"blog":       newData,
+			"totalCount": 1537,
 		})
 	})
-	// const filePath = "/root/hackday_backend/backend/rumor-repost/"
-	// dir, _ := ioutil.ReadDir(filePath)
-	// for index, file := range dir {
-	// 	err := os.Rename(filePath+file.Name(), filePath+strconv.Itoa(index)+".json")
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-	// }
-	// s.GET("/chat", func(c *gin.Context) {
-	// 	strNum := c.Query("num")
-	// 	num := strconv.Atoi(strNum)
-	// 	const filePath = "/root/hackday_backend/backend/rumor-repost/"
-	// 	file ,_ := os.Open(filePath)
-	// })
 	s.Run(":8008")
+}
+func getRedisClient() (redis.Conn, error) {
+	client, err := getRedisClient()
+	return client, err
+
 }
