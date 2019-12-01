@@ -1,2 +1,22 @@
-/node_modules
-/out
+out/
+node_modules/
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vscode/*
+.npm
+.DS_Store
+.idea
+/tmp
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
