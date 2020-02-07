@@ -34,117 +34,115 @@ func main() {
 	if err != nil {
 		fmt.Print("fail to connect redis ")
 	}
-	// var wait_group sync.WaitGroup
-	// lock := make(chan int)
-	// defer c.Close()
+	var wait_group sync.WaitGroup
+	lock := make(chan int)
+	defer c.Close()
+	// allChina := crawl.GetMapData(ALLCHINA, ALlCHINADATA)
+	// allChinaData := crawl.ParseAllChinaData(allChina)
+	// fmt.Println(allChinaData)
+	// temp, err := json.Marshal(allChinaData)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// c.Do("SET", "china_data", string(temp))
+	// fmt.Print(allChinaData)
+	// fmt.Print("------------allchina--------------\n\n\n")
 	/*--------------*/
-	allChina := crawl.GetMapData(ALLCHINA, ALlCHINADATA)
-	allChinaData := crawl.ParseAllChinaData(allChina)
-	fmt.Println(allChinaData)
-	temp, err := json.Marshal(allChinaData)
-	if err != nil {
-		fmt.Println(err)
-	}
-	c.Do("SET", "china_data", string(temp))
-	fmt.Print(allChinaData)
-	fmt.Print("------------allchina--------------\n\n\n")
-	/*--------------*/
-
-	// // go func(){
-	// 	wait_group.Add(1)
-	// 	defer wait_group.Done()
-	// 	allChina := crawl.GetMapData(ALLCHINA, ALlCHINADATA)
-	// 	allChinaData := crawl.ParseAllChinaData(allChina)
-	// 	temp , err := json.Marshal(allChinaData)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 	}
-	// 	c.Do("SET","china_data",string(temp))
-	// 	fmt.Print(allChinaData)
-	// 	fmt.Print("------------allchina--------------\n\n\n")
-	// }()
+	wait_group.Add(1)
+	go func(){
+		defer wait_group.Done()
+		allChina := crawl.GetMapData(ALLCHINA, ALlCHINADATA)
+		allChinaData := crawl.ParseAllChinaData(allChina)
+		temp , err := json.Marshal(allChinaData)
+		if err != nil {
+			fmt.Println(err)
+		}
+		c.Do("SET","china_data",string(temp))
+		fmt.Print(allChinaData)
+		fmt.Print("------------allchina--------------\n\n\n")
+	}()
 
 	/*--------------*/
 
-	allProvince := crawl.GetMapData(ALLPROVINCE, ALLPROVINCEDATA)
-	allProvinceData := crawl.ParseAllProvinceData(allProvince)
-	fmt.Println(allProvinceData)
-	provinceTemp, _ := json.Marshal(allProvinceData)
-	c.Do("SET", "all_province_data", string(provinceTemp))
-	fmt.Print("---------------province-------------------\n\n\n")
-	// go func(){
-	// 	wait_group.Add(1)
-	// 	defer wait_group.Done()
-	// 	allProvince := crawl.GetMapData(ALLPROVINCE, ALLPROVINCEDATA)
-	// 	allProvinceData := crawl.ParseAllProvinceData(allProvince)
-	// 	fmt.Println(allProvinceData)
-	// 	temp ,_:= json.Marshal(allProvinceData)
-	// 	fmt.Println(temp)
-	// 	c.Do("SET","all_province_data",string(temp))
-	// 	fmt.Print("---------------province-------------------\n\n\n")
-	// }()
+	// allProvince := crawl.GetMapData(ALLPROVINCE, ALLPROVINCEDATA)
+	// allProvinceData := crawl.ParseAllProvinceData(allProvince)
+	// fmt.Println(allProvinceData)
+	// provinceTemp, _ := json.Marshal(allProvinceData)
+	// c.Do("SET", "all_province_data", string(provinceTemp))
+	// fmt.Print("---------------province-------------------\n\n\n")
+	wait_group.Add(1)
+	go func(){
+		defer wait_group.Done()
+		allProvince := crawl.GetMapData(ALLPROVINCE, ALLPROVINCEDATA)
+		allProvinceData := crawl.ParseAllProvinceData(allProvince)
+		fmt.Println(allProvinceData)
+		temp ,_:= json.Marshal(allProvinceData)
+		fmt.Println(temp)
+		c.Do("SET","all_province_data",string(temp))
+		fmt.Print("---------------province-------------------\n\n\n")
+	}()
 
 	/*--------------*/
 
-	for _, province := range provinces {
-		hot := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "2"))
-		top := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "5"))
-		typeProp := crawl.GetMapData(TYPEPROP, crawl.GetTypeProp(province))
-		Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
+	// for _, province := range provinces {
+	// 	hot := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "2"))
+	// 	top := crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province, "5"))
+	// 	typeProp := crawl.GetMapData(TYPEPROP, crawl.GetTypeProp(province))
+	// 	Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
 
-		hotData := crawl.ParseSelectChoseList(hot)
+	// 	hotData := crawl.ParseSelectChoseList(hot)
 
-		topData := crawl.ParseSelectChoseList(top)
-		typePropData := crawl.ParseTypeProp(typeProp)
-		RankData := crawl.ParseRankData(Rank)
+	// 	topData := crawl.ParseSelectChoseList(top)
+	// 	typePropData := crawl.ParseTypeProp(typeProp)
+	// 	RankData := crawl.ParseRankData(Rank)
 
-		fmt.Println("hot:  ", hotData)
-		fmt.Print("---------------\n\n\n")
-		fmt.Println("hot:   ", typePropData)
-		fmt.Print("---------------\n\n\n")
-		fmt.Println(string(Rank))
-		fmt.Println("rank:  ", RankData)
-		fmt.Print("---------------\n\n\n")
-		hotTemp, _ := json.Marshal(hotData)
-		topTemp, _ := json.Marshal(topData)
-		typeTemp, _ := json.Marshal(typePropData)
-		rankTemp, _ := json.Marshal(RankData)
+	// 	fmt.Println("hot:  ", hotData)
+	// 	fmt.Print("---------------\n\n\n")
+	// 	fmt.Println("hot:   ", typePropData)
+	// 	fmt.Print("---------------\n\n\n")
+	// 	fmt.Println(string(Rank))
+	// 	fmt.Println("rank:  ", RankData)
+	// 	fmt.Print("---------------\n\n\n")
+	// 	hotTemp, _ := json.Marshal(hotData)
+	// 	topTemp, _ := json.Marshal(topData)
+	// 	typeTemp, _ := json.Marshal(typePropData)
+	// 	rankTemp, _ := json.Marshal(RankData)
 
-		c.Do("LPUSH", "province_hot_list", string(hotTemp))
-		c.Do("LPUSH", "province_top_list", string(topTemp))
-		c.Do("LPUSH", "type_prop", string(typeTemp))
-		c.Do("LPUSH", "rank", string(rankTemp))
+	// 	c.Do("LPUSH", "province_hot_list", string(hotTemp))
+	// 	c.Do("LPUSH", "province_top_list", string(topTemp))
+	// 	c.Do("LPUSH", "type_prop", string(typeTemp))
+	// 	c.Do("LPUSH", "rank", string(rankTemp))
 
-	}
-	// go func(){
-	// 	wait_group.Add(1)
-	// 	defer wait_group.Done()
-	// 	for _, province := range provinces{
-	// 		hot:= crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province,"2"))
-	// 		top := crawl.GetMapData(SELECTCHOOSELIST,crawl.GetSelectChoose(province,"5"))
-	// 		typeProp := crawl.GetMapData(TYPEPROP,crawl.GetTypeProp(province))
-	// 		Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
+	// }
+	wait_group.Add(1)
+	go func(){
+		defer wait_group.Done()
+		for _, province := range provinces{
+			hot:= crawl.GetMapData(SELECTCHOOSELIST, crawl.GetSelectChoose(province,"2"))
+			top := crawl.GetMapData(SELECTCHOOSELIST,crawl.GetSelectChoose(province,"5"))
+			typeProp := crawl.GetMapData(TYPEPROP,crawl.GetTypeProp(province))
+			Rank := crawl.GetMapData(SELECTRANKDATA, crawl.GetRank(province))
 
-	// 		hotData := crawl.ParseSelectChoseList(hot)
-	// 		topData := crawl.ParseSelectChoseList(top)
-	// 		typePropData := crawl.ParseTypeProp(typeProp)
-	// 		RankData := crawl.ParseRankData(Rank)
+			hotData := crawl.ParseSelectChoseList(hot)
+			topData := crawl.ParseSelectChoseList(top)
+			typePropData := crawl.ParseTypeProp(typeProp)
+			RankData := crawl.ParseRankData(Rank)
 
-	// 		hotTemp, _ := json.Marshal(hotData)
-	// 		topTemp,_:= json.Marshal(topData)
-	// 		typeTemp,_:= json.Marshal(typePropData)
-	// 		rankTemp,_ :=json.Marshal(RankData)
+			hotTemp, _ := json.Marshal(hotData)
+			topTemp,_:= json.Marshal(topData)
+			typeTemp,_:= json.Marshal(typePropData)
+			rankTemp,_ :=json.Marshal(RankData)
 
-	// 		lock <- 1
-	// 		c.Do("LPUSH","province_hot_list",string(hotTemp))
-	// 		c.Do("LPUSH","province_top_list", string(topTemp))
-	// 		c.Do("LPUSH","type_prop",string(typeTemp))
-	// 		c.Do("LPUSH","rank",string(rankTemp))
-	// 		<-lock
-	// 	}
+			lock <- 1
+			c.Do("LPUSH","province_hot_list",string(hotTemp))
+			c.Do("LPUSH","province_top_list", string(topTemp))
+			c.Do("LPUSH","type_prop",string(typeTemp))
+			c.Do("LPUSH","rank",string(rankTemp))
+			<-lock
+		}
 
-	// }()
+	}()
 
-	// wait_group.Wait()
+	wait_group.Wait()
 
 }
