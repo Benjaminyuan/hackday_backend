@@ -19,4 +19,4 @@ yarn-error.log*
 *.exe~
 *.dll
 *.so
-*.dylib
+*.dylib.idea/ 
